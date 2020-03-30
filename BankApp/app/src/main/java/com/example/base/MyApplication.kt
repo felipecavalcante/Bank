@@ -1,16 +1,17 @@
 package com.example.base
 
-import android.app.Activity
 import android.app.Application
 import com.example.base.di.AppComponent
+import com.example.base.di.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class MyApplication : Application(), HasActivityInjector {
+class MyApplication : Application(), HasAndroidInjector  {
+
     @Inject
-    lateinit var activityInjector: DispatchingAndroidInjector<Activity>
+    lateinit var activityInjector: DispatchingAndroidInjector<Any>
 
     lateinit var appComponentCreator: AppComponent
 
@@ -22,7 +23,7 @@ class MyApplication : Application(), HasActivityInjector {
 
         appComponentCreator.inject(this)
     }
-    override fun activityInjector(): AndroidInjector<Activity> = activityInjector
 
+    override fun androidInjector(): AndroidInjector<Any> = activityInjector
 
 }

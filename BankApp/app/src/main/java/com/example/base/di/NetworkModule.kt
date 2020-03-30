@@ -1,8 +1,5 @@
 package com.example.base.di
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
@@ -24,25 +21,15 @@ class NetworkingModule {
     @Provides
     fun provideRetrofit(
         @Named("baseUrl") baseUrl: String,
-        client: OkHttpClient,
-        gson: Gson
+        client: OkHttpClient
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .client(client)
             .build()
     }
-
-    @Singleton
-    @Provides
-    fun provideGson(): Gson {
-        return GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create()
-    }
-
 
     @Singleton
     @Provides

@@ -30,13 +30,15 @@
             style="@style/TextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:hint="@string/name"
+            android:nextFocusForward="@id/password"
+            app:layout_constraintBottom_toTopOf="@id/password">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/name"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
                 android:text="@={viewModel.nameField}" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,15 +47,15 @@
             style="@style/TextField.Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/name"
-            app:layout_constraintStart_toStartOf="@id/name"
-            app:layout_constraintTop_toBottomOf="@+id/name">
+            android:hint="@string/password"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
                 android:inputType="textPassword"
+                android:imeOptions="actionDone"
                 android:text="@={viewModel.passwordField}" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,15 +69,18 @@
             app:visible="@{viewModel.showLoading}" />
 
         <Button
+            android:id="@+id/login"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:onClick="@{_ -> viewModel.onUserClick()}"
+            android:onClick="@{_ -> viewModel.onUserRequestToLogin()}"
             android:text="@string/login"
             android:textAllCaps="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

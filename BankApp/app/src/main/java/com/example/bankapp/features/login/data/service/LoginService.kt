@@ -1,32 +1,16 @@
 package com.example.bankapp.features.login.data.service
 
-import com.example.base.di.AppModule.Companion.BASE_URL
+import com.example.bankapp.features.login.model.LoginRequest
+import com.example.bankapp.features.login.model.LoginResponse
 import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface LoginService{
-    @POST("{$BASE_URL}login")
+interface LoginService {
+    @POST("login")
     fun requestLogin(
         @Body
-        loginService: LoginRequest
+        loginRequest: LoginRequest
     ): Single<LoginResponse>
 }
 
-data class LoginRequest(
-    val user: String? = null,
-    val password: String? = null
-)
-
-data class LoginResponse (
-    val userAccount: IdUser?,
-    val error: Errors?
-)
-
-data class IdUser(
-    val userId: Int?
-)
-data class Errors(
-    val code: Int,
-    val message: String
-)

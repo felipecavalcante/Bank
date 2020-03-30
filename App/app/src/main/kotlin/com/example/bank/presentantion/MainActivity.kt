@@ -1,7 +1,8 @@
-package com.example.bank
+package com.example.bank.presentantion
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.bank.R
 
 class MainActivity : AppCompatActivity() {
 

@@ -3,13 +3,19 @@ package com.example.bankapp.features.login.presentation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bankapp.features.login.data.repository.LoginRepository
-import com.example.bankapp.features.login.data.service.LoginRequest
+import com.example.bankapp.features.login.model.LoginRequest
+import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
+import javax.inject.Named
 
 class LoginActivityViewModel @Inject constructor(
+    @Named("Main")
+    private val mainScheduler: Scheduler,
+    @Named("IO")
+    private val ioScheduler: Scheduler,
     private val repository: LoginRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val disposable = CompositeDisposable()
     val showLoading = MutableLiveData<Boolean>()
@@ -22,21 +28,27 @@ class LoginActivityViewModel @Inject constructor(
         super.onCleared()
     }
 
-    fun onUserClick() {
+    fun onUserRequestToLogin() {
+        val name = nameField.value ?: ""
+        val password = passwordField.value ?: ""
         disposable.add(repository
-            .getLogin(LoginRequest(user = null, password = null))
+            .getLogin(LoginRequest(user = name, password = password))
+            .subscribeOn(ioScheduler)
+            .observeOn(mainScheduler)
             .doOnSubscribe { showLoading.value = true }
             .doFinally { showLoading.value = false }
-            .subscribe({
-                screenState.value = ScreenState.Login(it.userAccount?.userId.toString())
-            },{
-
-            }))
-        screenState.value = ScreenState.OnUserRequestToLogin
+            .subscribe({ response ->
+                response.userAccount?.name?.let {
+                    screenState.value = ScreenState.Login(response.userAccount)
+                }
+                response.error?.message?.let {
+                    screenState.value = ScreenState.Error(it)
+                }
+            }, {
+                screenState.value = ScreenState.Error()
+            })
+        )
     }
+
 }
 
-sealed class ScreenState {
-    data class Login(val id: String) : ScreenState()
-    object OnUserRequestToLogin : ScreenState()
-}

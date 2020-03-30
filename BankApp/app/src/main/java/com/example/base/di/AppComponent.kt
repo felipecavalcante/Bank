@@ -1,7 +1,8 @@
 package com.example.base.di
 
 import android.app.Application
-import com.example.bankapp.features.login.di.ActivityModule
+import com.example.bankapp.features.details.di.DetailsModule
+import com.example.bankapp.features.login.di.LoginModule
 import com.example.base.MyApplication
 import dagger.BindsInstance
 import dagger.Component
@@ -14,7 +15,8 @@ import javax.inject.Singleton
     modules = [
         AndroidInjectionModule::class,
         AppModule::class,
-        ActivityModule::class,
+        LoginModule::class,
+        DetailsModule::class,
         NetworkingModule::class,
         ViewModelModule::class
     ]

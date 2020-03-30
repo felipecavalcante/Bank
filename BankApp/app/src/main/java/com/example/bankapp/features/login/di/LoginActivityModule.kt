@@ -13,9 +13,7 @@ import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
-import retrofit2.create
 import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 class LoginActivityModule {
@@ -31,9 +29,8 @@ class LoginActivityModule {
     fun provideRepository(repository: LoginRepository.Impl): LoginRepository = repository
 
     @Provides
-    @Singleton
-    fun provideService(retrofit: Retrofit): LoginService = retrofit.create()
-
+    @ActivityScope
+    fun provideService(retrofit: Retrofit): LoginService = retrofit.create(LoginService::class.java)
 
     @Named("IO")
     @Provides
